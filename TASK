@@ -1,0 +1,55 @@
+#include <OneWire.h>
+#include <DallasTemperature.h>
+float mint = 20;
+float maxt = 50;
+float t1 = 30;
+float t = 32;
+float android = 0;
+float delta = 0.2; 
+boolean stat = false;
+OneWire oneWire(2);
+DallasTemperature ds(&oneWire);
+
+OneWire oneWire1(3);
+DallasTemperature ds1(&oneWire1);
+OneWire oneWire2(4);
+DallasTemperature ds2(&oneWire2);
+void setup() {
+  Serial.begin(9600);
+  ds.begin();   
+  pinMode(6, OUTPUT); // объявляем пин 6 как выход
+   pinMode(8, OUTPUT); // объявляем пин 8 как выход
+  pinMode(7, OUTPUT); // объявляем пин 7 как выход
+  // инициализация
+}
+void loop() {
+  ds.requestTemperatures();                               
+  float t_now = ds.getTempCByIndex(0);
+  Serial.print("Sensor 0: ");
+  
+  Serial.print(ds.getTempCByIndex(0));
+  if (t > maxt || t1 < mint){
+Serial.print("Ты дурак");
+}// отправляем температуру
+  Serial.println("C");
+if (t_now > t){
+digitalWrite(6, HIGH); 
+digitalWrite(7, LOW); 
+digitalWrite(8, LOW);
+float android = 1; 
+}
+  else if (t_now < t1){
+digitalWrite(7, HIGH); 
+digitalWrite(6, LOW);
+digitalWrite(8, LOW);
+float android = 2  
+  }
+else  if (t_now > t1 && t_now < t){
+digitalWrite(8, HIGH);
+digitalWrite(7, LOW); 
+digitalWrite(6, LOW);
+float android = 3
+}
+
+
+}
