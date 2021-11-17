@@ -1,33 +1,84 @@
+#include <SoftwareSerial.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
+// Пины подключаемых устройств
+#define PIN_TEMP1 2
+#define PIN_TEMP2 3
+#define PIN_TEMP3 4
+#define PIN_TR1 6 
+#define PIN_TR2 7
+#define PIN_TR3 8
+#define PIN_RX 9
+#define PIN_TX 10
+#define PIN_SIGNAL1 A1
+#define PIN_SIGNAL2 A2
+// переменные 
 float mint = 20;
 float maxt = 50;
-float t1 = 30;
-float t = 32;
-float android = 0;
 float delta = 0.2; 
-boolean stat = false;
+float t_now = 0;
+int status = 0;
+boolean t_on = false;
+boolean status_con = false;
+String input_message;
+String output_message;
+uint32_t myTimer;
+// объекты температурных датчиков
 OneWire oneWire(2);
-DallasTemperature ds(&oneWire);
-
+DallasTemperature ds1(&oneWire);
 OneWire oneWire1(3);
-DallasTemperature ds1(&oneWire1);
+DallasTemperature ds2(&oneWire1);
 OneWire oneWire2(4);
-DallasTemperature ds2(&oneWire2);
+DallasTemperature ds3(&oneWire2);
+SoftwareSerial mySerial(PIN_RX, PIN_TX); 
 void setup() {
   Serial.begin(9600);
-  ds.begin();   
-  pinMode(6, OUTPUT); // объявляем пин 6 как выход
-   pinMode(8, OUTPUT); // объявляем пин 8 как выход
-  pinMode(7, OUTPUT); // объявляем пин 7 как выход
+  mySerial.begin(9600);
+  ds1.begin();   
+  ds2.begin();   
+  ds3.begin();   
+  pinMode(PIN_TEMP1, OUTPUT); // объявляем пин 6 как выход
+  pinMode(PIN_TEMP2, OUTPUT); // объявляем пин 8 как выход
+  pinMode(PIN_TEMP3, OUTPUT); // объявляем пин 7 как выход
+  temp();      
   // инициализация
 }
+void temp()
+{ 
+  ds1.requestTemperatures();                               
+  t_now = ds1.getTempCByIndex(0);
+  Serial.print("Temp now:");  
+  Serial.println(t_now);
+  ds2.requestTemperatures();                               
+  float t_hot_now = ds2.getTempCByIndex(0);
+  Serial.print("Temp hot now:");  
+  Serial.println(t_hot_now);
+  ds3.requestTemperatures();                               
+  float t_cold_now = ds3.getTempCByIndex(0);
+  Serial.print("Temp cold now:");  
+  Serial.println(t_cold_now);
+  output_message = output_message + String(t_now, 2) + ":" + String(status) + ":" + String(t_on) + "#";
+}
 void loop() {
-  ds.requestTemperatures();                               
-  float t_now = ds.getTempCByIndex(0);
-  Serial.print("Sensor 0: ");
+  if 
+  if (mySerial.available())
+  {
+    if (input_message == "hui124bho12#")
+    {
+      status_con = true
+    }
+    input_message = Serial.readStringUntil('#');
+    Serial.println(input_message);    
+  }
+  if (millis() - myTimer1 >= 500) {   // ищем разницу (500 мс)
+    myTimer1 = millis();              // сброс таймера
+    if (status_con)
+    {
+      output_message = "y:";
+      temp();      
+      }
+  }
   
-  Serial.print(ds.getTempCByIndex(0));
   if (t > maxt || t1 < mint){
 Serial.print("Ты дурак");
 }// отправляем температуру
@@ -42,14 +93,10 @@ float android = 1;
 digitalWrite(7, HIGH); 
 digitalWrite(6, LOW);
 digitalWrite(8, LOW);
-float android = 2  
   }
 else  if (t_now > t1 && t_now < t){
 digitalWrite(8, HIGH);
 digitalWrite(7, LOW); 
 digitalWrite(6, LOW);
-float android = 3
 }
-
-
 }
