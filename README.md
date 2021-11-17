@@ -1,1 +1,1 @@
-# git_projectv1
+Пример работы с GIT
